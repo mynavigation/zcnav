@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>网站导航与实时测速</title>
+    <style>
+        /* 全局明亮现代风变量 */
+        :root {
+            --bg-color: #f4f7f6;
+            --container-bg: #ffffff;
+            --text-main: #2c3e50;
+            --text-sub: #888888;
+            --border-color: #eeeeee;
+            --primary-btn: #3498db;
+            --primary-btn-hover: #2980b9;
+            --item-hover-bg: #fdfdfd;
+            --shadow-color: rgba(0,0,0,0.05);
+            --list-hover-shadow: rgba(0,0,0,0.08);
+            
+            /* 测速标签底色 */
+            --bg-pending: rgba(127, 140, 141, 0.15);
+            --bg-fast: rgba(39, 174, 96, 0.15);
+            --bg-medium: rgba(243, 156, 18, 0.15);
+            --bg-slow: rgba(192, 57, 43, 0.15);
+        }
+
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: var(--bg-color); 
+            margin: 0; 
+            padding: 20px; 
+            color: var(--text-main); 
+        }
+        
+        .header-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 900px;
+            margin: 0 auto 20px auto;
+            gap: 10px;
+        }
+
+        h1 { margin: 0; font-size: 24px; }
+
+        .btn-toggle-view {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--container-bg);
+            color: var(--text-main);
+            font-size: 14px;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .btn-toggle-view:hover { background: var(--item-hover-bg); }
+
+        .container { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            background: var(--container-bg); 
+            padding: 20px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 20px var(--shadow-color); 
+        }
+
+        .btn-test { 
+            display: block; width: 100%; padding: 12px; 
+            background: var(--primary-btn); color: white; 
+            border: none; border-radius: 6px; font-size: 16px; 
+            cursor: pointer; margin-bottom: 20px; font-weight: bold; 
+            transition: background 0.2s;
+        }
+        .btn-test:hover { background: var(--primary-btn-hover); }
+        .btn-test:disabled { background: #bdc3c7; cursor: not-allowed; }
+
+        /* 【列表布局】 */
+        ul.view-list { display: flex; flex-direction: column; padding: 0; margin: 0; list-style: none; }
+        ul.view-list li { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 15px; border-bottom: 1px solid var(--border-color); 
+        }
+        ul.view-list li:last-child { border-bottom: none; }
+        ul.view-list .site-info { flex: 1; min-width: 0; }
+        ul.view-list .url-text { display: inline-block; max-width: 250px; margin-left: 10px; }
+        ul.view-list .actions { display: flex; align-items: center; gap: 10px; }
+
+        /* 【卡片网格布局】 */
+        ul.view-card { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+            gap: 15px; padding: 0; margin: 0; list-style: none;
+        }
+        ul.view-card li { 
+            display: flex; flex-direction: column; justify-content: space-between;
+            padding: 15px; border: 1px solid var(--border-color); border-radius: 8px;
+            background: var(--container-bg); box-shadow: 0 2px 5px var(--shadow-color);
+            text-align: center; gap: 12px;
+        }
+        ul.view-card .site-info { width: 100%; }
+        ul.view-card .url-text { display: block; max-width: 100%; margin-top: 4px; }
+        ul.view-card .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; width: 100%; }
+        ul.view-card .speed { width: 100%; box-sizing: border-box; }
+
+        /* 公共交互动效 */
+        li { transition: all 0.3s ease; border-radius: 6px; }
+        li:hover { background: var(--item-hover-bg); transform: translateY(-2px); box-shadow: 0 4px 10px var(--list-hover-shadow); }
+        
+        .site-info a { text-decoration: none; color: var(--text-main); font-weight: bold; font-size: 16px; }
+        .site-info a:hover { color: var(--primary-btn); }
+        .url-text { font-size: 12px; color: var(--text-sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; }
+        
+        .btn-action { padding: 5px 10px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--container-bg); font-size: 12px; cursor: pointer; color: var(--text-sub); transition: all 0.2s; }
+        .btn-action:hover { background: var(--bg-color); color: var(--text-main); }
+        .btn-open { border-color: var(--primary-btn); color: var(--primary-btn); }
+        .btn-open:hover { background: var(--primary-btn); color: #fff; }
+        
+        /* 测速标签状态 */
+        .speed { font-weight: bold; padding: 4px 10px; border-radius: 4px; font-size: 13px; text-align: center; min-width: 70px; display: inline-block; }
+        .pending { color: #7f8c8d; background: var(--bg-pending); }
+        .fast { color: #27ae60; background: var(--bg-fast); }
+        .medium { color: #f39c12; background: var(--bg-medium); }
+        .slow { color: #c0392b; background: var(--bg-slow); }
+    </style>
+</head>
+<body>
+
+<div class="header-area">
+    <h1>网址导航与测速---众&nbsp;彩</h1>
+    <button class="btn-toggle-view" id="view-toggle-btn" onclick="toggleViewMode()">🎛️ 切换卡片模式</button>
+</div>
+
+<div class="container">
+    <button id="main-btn" class="btn-test" onclick="startTest()">开始测速</button>
+    <ul id="site-list" class="view-list">
+        <!-- 动态生成列表 -->
+    </ul>
+</div>
+<br />
+<div class="container">
+    <h1>说明：</h1>
+	<p style="font-size:15px;">&nbsp;&nbsp;&nbsp;&nbsp;1.导航站内网址不定期更新，保存导航站避免迷路</p>
+	<p style="font-size:15px;">&nbsp;&nbsp;&nbsp;&nbsp;2.网站内容较多，每一个网址首次访问加载较慢，加载完成后再次访问会很流畅</p>
+	<p style="font-size:15px;">&nbsp;&nbsp;&nbsp;&nbsp;3.大陆部分地区运营商屏蔽域名严重，如果无法打开网址，可尝试更改您的设备DNS后再试，修改DNS方法请点击：<a href="changeDNS.html" style="color:green">修改DNS</a></p>
+</div>
+
+<script>
+    // 在这里配置你的导航网址（显示顺序会严格固定）
+    let sites = [
+        { name: "网址", url: "https://www.gdvnpf.com:17888", delay: null },
+        { name: "网址", url: "https://www.bxdz6.com:17888", delay: null },
+		{ name: "网址", url: "https://www.0ozwk.com:17888", delay: null },
+		{ name: "网址", url: "https://www.iq6d4be.com:17888", delay: null },
+		{ name: "网址", url: "https://www.kytlm.com:17888", delay: null }
+    ];
+
+    let currentViewMode = 'list';
+
+    // 切换列表与卡片布局
+    function toggleViewMode() {
+        const listContainer = document.getElementById('site-list');
+        const toggleBtn = document.getElementById('view-toggle-btn');
+        
+        if (currentViewMode === 'list') {
+            currentViewMode = 'card';
+            listContainer.className = 'view-card';
+            toggleBtn.innerText = '☰ 切换列表模式';
+        } else {
+            currentViewMode = 'list';
+            listContainer.className = 'view-list';
+            toggleBtn.innerText = '🎛️ 切换卡片模式';
+        }
+        localStorage.setItem('nav-view-mode', currentViewMode);
+    }
+
+    // 渲染初始页面列表（严格按数组原始索引输出）
+    function renderList() {
+        const listContainer = document.getElementById('site-list');
+        listContainer.innerHTML = '';
+        sites.forEach((site, index) => {
+            let cssClass = 'pending';
+            let displayText = '未测速';
+
+            if (site.delay === 9999) {
+                cssClass = 'slow';
+                displayText = '超时/限';
+            } else if (site.delay > 0) {
+                displayText = `${site.delay} ms`;
+                if (site.delay <= 300) cssClass = 'fast';
+                else if (site.delay <= 800) cssClass = 'medium';
+                else cssClass = 'slow';
+            } else if (site.delay === 0) {
+                cssClass = 'pending';
+                displayText = '测速中...';
+            }
+
+            listContainer.innerHTML += `
+                <li>
+                    <div class="site-info">
+                        <a href="${site.url}" target="_blank">${site.name}</a>
+                        <span class="url-text" title="${site.url}">${site.url}</span>
+                    </div>
+                    <div class="actions">
+                        <span id="speed-${index}" class="speed ${cssClass}">${displayText}</span>
+                        <button class="btn-action" onclick="copyUrl('${site.url}', this)">📋 复制</button>
+                        <button class="btn-action btn-open" onclick="window.open('${site.url}', '_blank')">🔗 打开</button>
+                    </div>
+                </li>
+            `;
+        });
+    }
+
+    // 复制网址功能
+    function copyUrl(url, buttonElement) {
+        navigator.clipboard.writeText(url).then(() => {
+            const originalText = buttonElement.innerText;
+            buttonElement.innerText = "✅ 已复制";
+            buttonElement.style.borderColor = "#27ae60";
+            buttonElement.style.color = "#27ae60";
+            setTimeout(() => {
+                buttonElement.innerText = originalText;
+                buttonElement.style.borderColor = "var(--border-color)";
+                buttonElement.style.color = "var(--text-sub)";
+            }, 1500);
+        }).catch(err => alert("复制失败：" + url));
+    }
+
+    // 测试单个网站延迟的 Promise
+    function pingSite(site, index) {
+        return new Promise(async (resolve) => {
+            const startTime = performance.now();
+            try {
+                await fetch(site.url, { mode: 'no-cors', cache: 'no-store' });
+                const endTime = performance.now();
+                site.delay = Math.round(endTime - startTime);
+            } catch (err) {
+                site.delay = 9999;
+            }
+            // 测速完成后直接单点更新对应 DOM 节点，保持原固定顺序
+            updateSingleSpeedDisplay(index);
+            resolve();
+        });
+    }
+
+    // 精准更新单条数据的测速标签
+    function updateSingleSpeedDisplay(index) {
+        const speedTag = document.getElementById(`speed-${index}`);
+        if (!speedTag) return;
+        const site = sites[index];
+
+        if (site.delay === 9999) {
+            speedTag.className = 'speed slow';
+            speedTag.innerText = '超时/限';
+        } else {
+            speedTag.innerText = `${site.delay} ms`;
+            if (site.delay <= 300) speedTag.className = 'speed fast';
+            else if (site.delay <= 800) speedTag.className = 'speed medium';
+            else speedTag.className = 'speed slow';
+        }
+    }
+
+    // 限制测速频率的冷却时间（单位：秒）
+    const COOLDOWN_TIME = 10; 
+
+    // 触发批量并发测速（带频率限制功能）
+    async function startTest() {
+        const btn = document.getElementById('main-btn');
+        btn.disabled = true;
+        btn.innerText = "正在全力测速中，请稍候...";
+
+        // 1. 初始化所有站点的状态为“测速中...”
+        sites.forEach((site, index) => {
+            site.delay = 0;
+            const speedTag = document.getElementById(`speed-${index}`);
+            if (speedTag) {
+                speedTag.className = 'speed pending';
+                speedTag.innerText = '测速中...';
+            }
+        });
+
+        // 2. 异步并发执行测速
+        const promises = sites.map((site, index) => pingSite(site, index));
+        await Promise.all(promises);
+
+        // 3. 测速完成后，进入冷却倒计时阶段
+        let timeLeft = COOLDOWN_TIME;
+        
+        // 使用定时器执行倒计时逻辑
+        const countdownTimer = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(countdownTimer);
+                btn.disabled = false;
+                btn.innerText = "重新测速";
+            } else {
+                btn.innerText = `请稍候... 重新测速 (${timeLeft}秒)`;
+                timeLeft--;
+            }
+        }, 1000);
+    }
+
+
+    // 页面初次加载逻辑
+    window.onload = () => {
+        // 读取本地存储的用户布局偏好
+        const savedViewMode = localStorage.getItem('nav-view-mode') || 'list';
+        if (savedViewMode === 'card') {
+            currentViewMode = 'list';
+            toggleViewMode();
+        }
+        renderList();
+        startTest();
+    };
+</script>
+
+</body>
+</html>
