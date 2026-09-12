@@ -98,29 +98,77 @@
             font-style: italic;
         }
 
-        .dns-recommend {
-            background-color: #e8f4fd;
-            border-left: 4px solid var(--primary-color);
-            padding: 15px;
-            margin-top: 30px;
-            border-radius: 0 4px 4px 0;
-        }
+        /* 基础容器样式 */
+  .dns-recommend { 
+    background-color: #e8f4fd; 
+    border-left: 4px solid #1a73e8; /* 替换了原代码未定义的变量 */
+    padding: 15px; 
+    margin-top: 30px; 
+    border-radius: 0 4px 4px 0; 
+    font-family: sans-serif; /* 统一字体 */
+  } 
+  
+  .dns-table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    margin-top: 10px; 
+    background-color: #fff; /* 手机端背景更清晰 */
+  } 
+  
+  .dns-table th, .dns-table td { 
+    border: 1px solid #ddd; 
+    padding: 10px; 
+    text-align: left; 
+  } 
+  
+  .dns-table th { 
+    background-color: #f2f2f2; 
+  }
 
-        .dns-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-
-        .dns-table th, .dns-table td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-
-        .dns-table th {
-            background-color: #f2f2f2;
-        }
+  /* 📱 手机端适配关键代码 (屏幕宽度小于 600px 时生效) */
+  @media screen and (max-width: 600px) {
+    /* 隐藏原有的表格横向表头 */
+    .dns-table thead {
+      display: none;
+    }
+    
+    /* 将表格行、单元格全部转为块级元素（上下堆叠） */
+    .dns-table, .dns-table tbody, .dns-table tr, .dns-table td {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    
+    /* 每一行变成一个独立的小卡片 */
+    .dns-table tr {
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    
+    /* 去掉单元格原本的边框，改用内边距分隔 */
+    .dns-table td {
+      border: none;
+      border-bottom: 1px solid #eee;
+      position: relative;
+      padding-left: 35%; /* 为左侧的标签留出空间 */
+    }
+    
+    .dns-table td:last-child {
+      border-bottom: none; /* 最后一个单元格去掉底边框 */
+    }
+    
+    /* 使用伪元素 data-label 动态生成左侧的标签 */
+    .dns-table td::before {
+      content: attr(data-label);
+      position: absolute;
+      left: 1px;
+      width: 50%;
+      font-weight: bold;
+      color: #666;
+    }
+  }
     </style>
 </head>
 <body>
@@ -164,36 +212,36 @@
 	<p><span class="highlight">4.2谷歌浏览器手机版</span>，手机打开谷歌浏览器，点击屏幕右上角的三个小点➠选择进入“设置”➠找到“隐私与安全”并进入➠找到“使用安全DNS”，默认是“关闭”状态➠点击“使用安全DNS”➠将"使用安全DNS"右侧的开关打开➠点击选择“另选一个提供商”➠“另选一个提供商”下方选择“自定义”并在“提供商网址”处输入  https://dns.alidns.com/dns-query   ➠点击左上角的返回保存设置，彻底关闭手机浏览器再重新打开即可生效，可用的DNS有  https://dns.alidns.com/dns-query  https://223.5.5.5/dns-query    https://223.6.6.6/dns-query    https://doh.pub/dns-query   https://dns.pub/dns-query  https://1.12.12.12/dns-query   https://doh.360.cn/dns-query    https://doh.opendns.com/dns-query  如想恢复设置，将"使用安全DNS"右侧的开关关闭即可</p>
 	<p><span class="highlight">方法4仅限于浏览器使用，不区分电脑或手机，APP使用此方法无效，浏览器不限于谷歌浏览器，比如EDGE、火狐等在设置中有类似“安全DNS”选项设置的浏览器均可使用此方法，操作基本相似，如浏览器无类似“安全DNS”选项设置则此方法不适用，上述方法设置完成后为了使设置生效，都需要关闭浏览器或APP再重新打开，如浏览器设置后未生效可尝试清除缓存和cookie后再试</span></p>
 
-    <!-- 推荐公共 DNS -->
-    <div class="dns-recommend">
-        <strong>💡 常用公共 DNS 推荐：</strong>
-        <table class="dns-table">
-            <thead>
-                <tr>
-                    <th>服务商</th>
-                    <th>首选 DNS</th>
-                    <th>备用 DNS</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>阿里 DNS</td>
-                    <td>223.5.5.5</td>
-                    <td>223.6.6.6</td>
-                </tr>
-                <tr>
-                    <td>腾讯 DNS</td>
-                    <td>119.29.29.29</td>
-                    <td>119.28.28.28</td>
-                </tr>
-                <tr>
-                    <td>Google DNS</td>
-                    <td>8.8.8.8</td>
-                    <td>8.8.4.4</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <div class="dns-recommend"> 
+  <strong>💡 常用公共 DNS 推荐：</strong> 
+  <table class="dns-table"> 
+    <thead> 
+      <tr> 
+        <th>服务商</th> 
+        <th>首选DNS</th> 
+        <th>备用DNS</th> 
+      </tr> 
+    </thead> 
+    <tbody> 
+      <!-- 注意：这里的 td 增加了 data-label 属性，用于手机端显示标签 -->
+      <tr> 
+        <td data-label="服务商">阿里 DNS</td> 
+        <td data-label="首选DNS">223.5.5.5</td> 
+        <td data-label="备用DNS">223.6.6.6</td> 
+      </tr> 
+      <tr> 
+        <td data-label="服务商">腾讯 DNS</td> 
+        <td data-label="首选DNS">119.29.29.29</td> 
+        <td data-label="备用DNS">119.28.28.28</td> 
+      </tr> 
+      <tr> 
+        <td data-label="服务商">Google DNS</td> 
+        <td data-label="首选DNS">8.8.8.8</td> 
+        <td data-label="备用DNS">8.8.4.4</td> 
+      </tr> 
+    </tbody> 
+  </table> 
+</div>
 </div>
 
 </body>
