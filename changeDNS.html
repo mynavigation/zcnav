@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>如何修改设备DNS服务器地址（图文教程）</title>
+    <style>
+        :root {
+            --primary-color: #0066cc;
+            --text-color: #333333;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--bg-color);
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            color: #444;
+            font-size: 1.3rem;
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+        }
+
+        .step-number {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .img-container {
+			max-width: 400px;
+            text-align: center;
+            margin: 20px auto;
+            background-color: #f9f9f9;
+            padding: 4px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
+
+        .img-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .img-placeholder {
+            height: 200px;
+            background: #e9ecef;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .dns-recommend {
+            background-color: #e8f4fd;
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin-top: 30px;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .dns-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .dns-table th, .dns-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .dns-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>设备修改 DNS 教程</h1>
+    
+    <p>当您遇到网页加载缓慢或无法打开特定网站时，修改 DNS 服务器可能会有效解决问题。以下是详细的操作步骤：</p>
+
+    <!-- 步骤 1 -->
+    <h2><span class="step-number">1</span>安卓手机</h2>
+	<p>安卓手机分安卓系统版本9及以上和安卓系统版本9以下的修改DNS方法</p>
+    <p><span class="highlight">1.1安卓手机系统版本9及以上</span>，因手机厂商较多，操作方法略有不同，本文不一一例举，本文以OPPO手机为例，在手机主界面下滑弹出搜索界面➠输入“DNS”或“私人”或“加密”，切换搜索选项为本机，看是否有“私人DNS”或者“加密DNS”选项，如果没有可点击手机[“设置”➠“连接与共享”或者(“移动网络”➠“更多连接设置”)]➠点击进入“私人DNS”，这时会看到“私人DNS”下方显示“关闭”的字样➠点击“私人DNS”➠选择“指定私人DNS”，输入  dns.alidns.com  ，再点击保存或者是勾号按钮保存DNS，当"指定私人DNS"下方显示“已连接dns.alidns.com”时表示该DNS可用并且已经生效，如显示“无法连接dns.alidns.com”可以修改成其他DNS，可用的DNS有：dns.alidns.com   dot.pub   dns.pub   dot.360.cn   dot-pure.onedns.net   dns.umbrella.com   1dot1dot1dot1.cloudflare-dns.com  dns.opendns.com  ，这些DNS是阿里、腾讯、360、微步、思科、CF等品牌的公共DNS，可用性和安全性保障高。</p>
+    <div class="img-container">
+        <!-- 请将 src 中的图片地址替换为您自己的图片路径 -->
+        <img src="ANDROID9_DOT.png" alt="安卓手机系统版本9及以上">
+    </div>
+	<p><span class="highlight">1.2安卓手机系统版本9以下</span>，因系统版本较低，无法使用上一种方法，只能在连接WIFI时使用，在使用手机移动网络时无效，打开手机“设置”➠点击“WLAN”➠点击已连接的WIFI名称进入设置➠往下翻找到“IP设置”，默认显示“DHCP”,点击“IP设置”➠选择“静态”，然后继续往下翻➠找到“域名1”和“域名2”或者是“DNS 1”和“DNS 2”，修改域名1和域名2为  119.29.29.29  和  223.5.5.5 ，然后点击返回保存DNS，这里的DNS是IP形式的，以4段数字中间用三个点隔开，上一种方法不能输入IP，只能输入域名，可用的DNS IP有  223.5.5.5  223.6.6.6  119.29.29.29  119.28.28.28   182.254.116.116  122.112.208.1  114.115.192.11    116.205.5.1    139.9.23.90   180.76.76.76   114.114.114.114   114.114.115.115   8.8.8.8    8.8.4.4   208.67.222.222   1.0.0.1</p>
+    <div class="img-container">
+        <!-- 请将 src 中的图片地址替换为您自己的图片路径 -->
+        <img src="ANDROID_WIFI_DNS.png" alt="安卓手机系统版本9以下">
+    </div>
+
+    <!-- 步骤 2 -->
+    <h2><span class="step-number">2</span>苹果手机</h2>
+    <p>因苹果手机或网络运营商默认不允许用户修改DNS over TLS，只能在连接WIFI后修改DNS，在使用手机移动网络时无效，打开手机“设置”➠点击“无线局域网”➠点击已连接的WIFI名称进入设置➠往下翻找到DNS项里面的“配置DNS”，默认是“自动”➠点击“配置DNS”➠选择“手动”，点击红色图标的减号将默认的DNS都删掉，有几个就删掉几个，再点击“添加服务器”，输入  119.29.29.29 ，然后继续点击“添加服务器”，输入  223.5.5.5 ，至少输入两组，也可以输入更多组DNS，可用的DNS IP有  223.5.5.5  223.6.6.6  119.29.29.29  119.28.28.28   182.254.116.116  122.112.208.1  114.115.192.11    116.205.5.1    139.9.23.90   180.76.76.76   114.114.114.114   114.114.115.115   8.8.8.8    8.8.4.4   208.67.222.222   1.0.0.1</p>
+    <div class="img-container">
+        <img src="IPHONE_WIFI_DNS.JPG" alt="苹果手机">
+    </div>
+
+    <!-- 步骤 3 -->
+    <h2><span class="step-number">3</span>Windows系统电脑</h2>
+    <p>本文以windows11为例，鼠标左键点击屏幕右下角任务栏的网络连接图标进入设置➠鼠标左键点击网络连接图标旁边的箭头图标进入设置➠鼠标右键点击已连接的网络名称，在弹出的右键菜单里面鼠标左键点击“属性”打开网络连接设置，此时会打开系统设置页面➠鼠标左键点击“DNS服务器分配”后面的“编辑”按钮，会弹出“编辑网络DNS设置”窗口➠鼠标左键点击“自动(DHCP)”按钮，会出现“自动(DHCP)”和“手动”两个选项➠鼠标左键点击选择“手动”➠鼠标左键点击“IPv4”下面按钮打开开关➠在“首选DNS”里输入119.29.29.29，“备用DNS”输入223.5.5.5，最后点击“保存”，可用的DNS IP有  223.5.5.5  223.6.6.6  119.29.29.29  119.28.28.28   182.254.116.116  122.112.208.1  114.115.192.11    116.205.5.1    139.9.23.90   180.76.76.76   114.114.114.114   114.114.115.115   8.8.8.8    8.8.4.4   208.67.222.222   1.0.0.1</p>
+    <div class="img-container">
+        <img src="WINDOWS_WIFI_DNS.JPG" alt="Windows系统电脑">
+    </div>
+
+    <!-- 步骤 4 -->
+    <h2><span class="step-number">4</span>谷歌浏览器</h2>
+    <p><span class="highlight">4.1谷歌浏览器电脑版</span>，电脑打开谷歌浏览器，左键点击屏幕右上角地址栏右侧的三个小点➠选择进入“设置”➠在屏幕左侧导航栏找到“隐私与安全”并进入➠在屏幕中间从上往下找到“安全”并进入➠屏幕往下翻，找到“使用安全DNS”，确保后面的开关状态为打开，一般默认是打开的➠在“使用安全DNS”下方有“选择DNS提供商”，默认设置为“操作系统默认设置（若有）”➠点击“操作系统默认设置（若有）”，选择“添加自定义DNS服务提供商”，在下方输入  https://dns.alidns.com/dns-query ➠关闭浏览器标签，关闭整个浏览器再重新打开即可生效，可用的DNS有  https://dns.alidns.com/dns-query  https://223.5.5.5/dns-query    https://223.6.6.6/dns-query    https://doh.pub/dns-query   https://dns.pub/dns-query  https://1.12.12.12/dns-query   https://doh.360.cn/dns-query    https://doh.opendns.com/dns-query  如想恢复设置，在“选择DNS提供商”右侧选择“操作系统默认设置（若有）”即可</p>
+	<p><span class="highlight">4.2谷歌浏览器手机版</span>，手机打开谷歌浏览器，点击屏幕右上角的三个小点➠选择进入“设置”➠找到“隐私与安全”并进入➠找到“使用安全DNS”，默认是“关闭”状态➠点击“使用安全DNS”➠将"使用安全DNS"右侧的开关打开➠点击选择“另选一个提供商”➠“另选一个提供商”下方选择“自定义”并在“提供商网址”处输入  https://dns.alidns.com/dns-query   ➠点击左上角的返回保存设置，彻底关闭手机浏览器再重新打开即可生效，可用的DNS有  https://dns.alidns.com/dns-query  https://223.5.5.5/dns-query    https://223.6.6.6/dns-query    https://doh.pub/dns-query   https://dns.pub/dns-query  https://1.12.12.12/dns-query   https://doh.360.cn/dns-query    https://doh.opendns.com/dns-query  如想恢复设置，将"使用安全DNS"右侧的开关关闭即可</p>
+	<p><span class="highlight">方法4仅限于浏览器使用，不区分电脑或手机，APP使用此方法无效，浏览器不限于谷歌浏览器，比如EDGE、火狐等在设置中有类似“安全DNS”选项设置的浏览器均可使用此方法，操作基本相似，如浏览器无类似“安全DNS”选项设置则此方法不适用，上述方法设置完成后为了使设置生效，都需要关闭浏览器或APP再重新打开，如浏览器设置后未生效可尝试清除缓存和cookie后再试</span></p>
+
+    <!-- 推荐公共 DNS -->
+    <div class="dns-recommend">
+        <strong>💡 常用公共 DNS 推荐：</strong>
+        <table class="dns-table">
+            <thead>
+                <tr>
+                    <th>服务商</th>
+                    <th>首选 DNS</th>
+                    <th>备用 DNS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>阿里 DNS</td>
+                    <td>223.5.5.5</td>
+                    <td>223.6.6.6</td>
+                </tr>
+                <tr>
+                    <td>腾讯 DNS</td>
+                    <td>119.29.29.29</td>
+                    <td>119.28.28.28</td>
+                </tr>
+                <tr>
+                    <td>Google DNS</td>
+                    <td>8.8.8.8</td>
+                    <td>8.8.4.4</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
